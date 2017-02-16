@@ -2,8 +2,8 @@ import urllib2
 import json as jjss
 
 geth_addr = 'http://localhost:8545'
-from_addr = '0x6e20cdcaa581373bf592d676d9c305183bb64b8a'
-to_addr = '0x97c10115dfff1866f3cfbd6b8d4b237c7a53286a'
+from_addr = '0x2fcdbd9ee6c3a72fbeccf11170970209a89045ba'
+to_addr = '0xf2cf7e48f33981f38c0f4af971b8bdd6f7a9582a'
 gas = '0xffffff'
 
 def get32hex(i):
@@ -16,7 +16,7 @@ def requestWithJSON(json):
     req = urllib2.Request(url=geth_addr, data=encoded_json)
     response_data = urllib2.urlopen(req)
     response = response_data.read()
-    return response
+    return jjss.loads(response)
 
 def addScore(account, score):
     data = '0xddcbf794' + get32hex(int(account)) + get32hex(int(score))

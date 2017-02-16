@@ -102,7 +102,7 @@ def consume():
     curScore += (cost / 10)
     db.execute('update users set score = ? where userid = ?', [curScore, userid])
     db.commit()
-    gd.addScore(results[0]['id'], (cost / 10))
+    gb.addScore(results[0]['id'], (cost / 10))
     return jsonify(success=True, userid=userid)
 
 @app.route('/getScore', methods=['GET'])
@@ -118,7 +118,12 @@ def getScore():
     results = cur.fetchall()
     if len(results) == 0:
         return jsonify(msg='user not found')
-    score = results[0]['score']
+    response = gb.getBalance(results[0]['id'])
+    print response
+    score = int(response['result'], 16)
+    #score = results[0]['score']
+    db.execute('update users set score = ? where userid = ?', [score, userid])
+    db.commit()
     return jsonify(userid=userid, score=score)
 
 @app.route('/useScore', methods=['POST'])
@@ -141,7 +146,7 @@ def useScore():
     curscore -= cost
     db.execute('update users set score = ? where userid = ?', [curscore, userid])
     db.commit()
-    gd.useScore(results[0]['id'], cost)
+    gb.useScore(results[0]['id'], cost)
     return jsonify(success=True, userid=userid)
 
 def sha1uname(uname):
